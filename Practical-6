@@ -1,0 +1,61 @@
+* Aim:Write a php program to display your resume, class timetable and online calculator on three different pages. Display same menu header on all pages.
+
+=====>Code:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .btn{
+            border: 1px solid black;
+            height: 20;
+            margin-left: 50px;
+            padding: 5px;
+            padding: 2px 2px;
+            width: 10%;
+            font-size: 25px;
+            border-radius: 10px;
+            background-color: chartreuse;
+        }
+        .btn :hover{
+            background-color: greenyellow;
+            color: black;
+        }
+        .div{
+            
+            padding: 20px;
+            background-color: blue;
+            text-align: center;
+        }   
+
+    </style>
+    <script type="text/javascript">
+        function newSrc()
+        {
+            document.getElementById('if').src="resume.html";
+        }
+        function newSrc1()
+        {
+            document.getElementById('if').src="tt.html";
+        }
+        function newSrc2()
+        {
+            document.getElementById('if').src="calc.html";
+        }
+    </script>
+</head>
+<body>
+    <div class="div">
+        <button class="btn" onclick="newSrc();">Resume</button>
+        <button class="btn" onclick="newSrc1();">Time Table</button>
+        <button class="btn" onclick="newSrc2();">Calc</button>
+
+    </div>
+    <iframe width="100%" height="1500" id="if"></iframe>
+    
+</body>
+</html>

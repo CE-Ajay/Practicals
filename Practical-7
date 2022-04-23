@@ -1,0 +1,83 @@
+* Aim:Write a php program for website registration, save data on database and display prefilled profile of the user after successful submission.
+
+=====> HTML Code[.html]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <style>
+        .div{
+            border: 2px black;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            margin-left: 40%;
+            margin-top: 20%;
+            border: 2px solid black;
+            width: 15%;
+            text-align: center;
+            padding-bottom: 40px;
+            background-color:cadetblue;
+        }
+        .btn{
+            border: 1px solid black;
+        }
+        .btn:hover{
+            background-color:black;
+            color: white;
+            transition: 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+        }
+        
+    </style>
+
+</head>
+<body>
+    <div class="div">
+        <h2 class="h2">Registration Form</h2>
+        <form class="f" onsubmit="return validate(this)" method="get" action="http://localhost/WP/demo.php">
+        Username:<input type="text" name="Username" size="10">
+        <button class="btn" type="submit">Submit</button>
+        </form>
+    </div>
+    <script type="text/javascript">
+    function validate(form) {
+        var Username = form.Username.value;
+        var Firstcharstr1 = /^@[A-Za-z]/;
+        var Firstcharstr2 = /^_[A-Za-z]/;
+        var Firstcharstr3 = /^[0-9]/;
+
+        if (Username.length === 0) {
+            alert("You must enter a Username");
+            return false;
+        }
+
+        if ((Firstcharstr1.test(Username))){
+            alert("You must enter valid Username");
+            return false;
+        }
+        if ((Firstcharstr2.test(Username))) {
+            alert("You must enter valid Username");
+            return false;
+        }
+        if ((Firstcharstr3.test(Username))) {
+            alert("You must enter valid Username");
+            return false;
+        }
+        else{
+            alert("Successfully Register");
+        return true;
+        }
+}
+
+    </script>
+</body>
+</html>
+
+
+=======> PHP Code[.php]
+<?php
+    $name = $_GET['Username'];
+    echo "<h3> Hello $name </h3>";
+    echo "<h3>Successfully Register</h3>"
+?>

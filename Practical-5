@@ -1,0 +1,96 @@
+* Aim:Create a website registration page, use client-side validation all the fields. On successful data submission display a popup with success and redirect to your resume page. Use external js for validation.
+
+======>HTML Code[.html with css]
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .a
+        {
+            background-color: aqua;
+            margin-left: 45%;
+            margin-top: 200px;
+            padding-left: 40px;
+            width: 10%;    
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            border: 2px solid black;
+            box-shadow: 0px 0px 43px 17px rgba(153, 153, 153, 1);;
+            border-radius: 15%;
+        }
+        .f
+        {
+            width: 80%;
+           
+        }
+        .s
+        {
+            border: 1px solid black;
+            margin-left: 45px;
+            border-radius: 15%;
+            transition: 0.5s ease-in-out;
+        }
+        .s:hover
+        {
+            background-color: black;
+            color: aqua;
+        }
+    </style>
+   
+</head>
+<body>
+    <div class="a">
+    <h1>Login Form</h1>
+    <form class="f" name="myform" onsubmit="return validate(this)" method="get" action="p1.html">
+    Username:<input type="text" name="Username" size="10"><br><br>
+    Password:<input type="text" name="Password" size="12"><br><br>
+    <input type="submit" class="s" value="Register" onclick="myfunction()"><br><br>
+    </form>
+    </div>
+    <script type="text/javascript" src="validate.js"></script>
+</body>
+</html>
+
+JS Validation[.js File]
+function validate(form) {
+    var un = form.Username.value;
+    var pw = form.Password.value;
+    var Firstcharstr1 = /^@[A-Za-z]/;
+    var Firstcharstr2 = /^_[A-Za-z]/;
+    var Firstcharstr3 = /^[0-9]/;
+	
+    if (un.length === 0) {
+        alert("You must enter a Username");
+        return false;
+    }
+    if (pw.length === 0) {
+        alert("You must enter a Password");
+        return false;
+    }
+    if (pw.length < 6 || pw.length > 12) {
+        alert("You must enter Password between 6 to 12 characters");
+        return false;
+    }
+
+    if ((Firstcharstr1.test(un))) {
+        alert("You must enter valid Username");
+        return false;
+    }
+    if ((Firstcharstr2.test(un))) {
+        alert("You must enter valid Username");
+        return false;
+    }
+    if ((Firstcharstr3.test(un))) {
+        alert("You must enter valid Username");
+        return false;
+    }
+    else{
+	alert(“Successfully Register”);
+    	return true;
+	}
+}

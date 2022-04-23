@@ -1,0 +1,332 @@
+* Aim 9: Write a blog application with different users -Writer will have ability to write a blog,normal users can only comment on blog.
+                                                     &
+* Aim 10:Write an admin page for your website where admin can view all the users and blogs from db,manually users and remove some users.
+
+====>addpost.php:
+<?php
+include('connection.php');
+$title = $_POST['title'];
+$user_id = $_POST['user_id'];
+$content = $_POST['content'];
+$query = "INSERT INTO `blog_post`(`title`, `content`, `author_id`)
+VALUES ('$title','$content','$user_id')";
+$result = mysqli_query($con,
+$query);
+if ($result) {
+echo "New record created successfully";
+header("Location: home.php");
+}
+else
+{
+echo $con->error;
+echo $title . $user_id . $content;
+}
+$con->close();
+?>
+New_post.php:
+<?php
+// Initialize the session session_start();
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] != true)
+{ header("location: login.php");
+exit;
+}
+else{
+$email = $_SESSION["email"];
+$user_id = $_SESSION["user_id"];
+}
+?>
+<html>
+<head>
+<title>home</title>
+<link rel="stylesheet"
+href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.mi n.css"
+integrity="sha384-
+Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/d
+AiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery- 3.2.1.slim.min.js"
+integrity="sha384-
+KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93
+hXpG5KkN"
+crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/poppe
+r.min.js"
+integrity="sha384-
+ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvf
+a0b4Q"
+crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.
+js"
+integrity="sha384-
+JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PV
+CmYl"
+crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="static/main.css">
+</head>
+<body>
+<?php include 'base.php';?>
+<main role="main" class="container">
+<div class="row">
+<div class="col-md-8">
+<div class="content-section">
+<form action="add_post.php" method="POST">
+<input type="hidden" name="user_id" value="<?php echo $user_id?>">
+<fieldset class="form-group">
+<legend class="border-bottom mb-4">Newpost</legend>
+<div id="div_id_title" class="form-group" requiredField>
+<label for="id_title" class=" Title<span class="asteriskField">*</span>
+</label>
+<div class="">
+<input type="text"name="title" maxlength="100" class="textinput textInput
+form-control" required id="id_title">
+</div>
+</div>
+<div id="div_id_content" class="form-group" requiredField>
+<label for="id_content" class=" Content<span class="asteriskField">*</span>
+</label>
+<div class="">
+<textarea name="content"cols="40" rows="10" class="textarea form-control"
+required id="id_content"></textarea>
+</div>
+</div>
+</fieldset>
+<div class="form-group">
+<button class="btn btn-outline-info" type="submit">Post</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</main>
+</body>
+</html>
+
+
+====> Admin.php:
+<html>
+<head>
+<title>admin</title>
+<link rel="stylesheet"
+href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.mi n.css"
+integrity="sha384-
+Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/d
+AiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fontawesome/
+4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="static/main.css">
+</head>
+<body>
+<?php include 'base.php';?>
+<main role="main" class="container">
+<div class="row" >
+<div class="col-md-10">
+<article class="media content-section">
+<table class="table table-hover">
+<thead>
+<tr>
+<th colspan="6"><center><h3>User</h3></center></th>
+</tr>
+<tr>
+<th scope="col">#</th>
+<th scope="col">First</th>
+<th scope="col">Last</th>
+<th scope="col">Handle</th>
+<th scope="col"><center>Action</center></th>
+</tr>
+</thead>
+<tbody>
+<?php
+include('connection.php');
+$sql = "SELECT * from users";
+$result = mysqli_query($con, $sql);
+// $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+if ($result -> num_rows > 0) {
+// output data of each row while($row = $result->fetch_assoc())
+{
+$id = $row['user_id'];
+$first_name= $row['firstname'];
+$last_name=$row['lastname'];
+// $username =$row['username'];
+$email =$row['email'];
+echo '<tr>
+<th scope="row">'.$id.'</th>
+<td>'.$first_name.'</td>
+<td>'.$last_name.'</td>
+<td>'.$email.'</td>
+<td><center> <a href="delete.php?t=u&id='.$id.'"><i class="fa fatrash"></
+i></a></center></td>
+</tr>';
+}
+}
+?>
+</tbody>
+</table>
+</article>
+<article class="media content-section">
+<table class="table table-hover">
+<thead>
+<tr>
+<th colspan="7"><center><h3>BLOG</h3></center></th>
+</tr>
+<tr>
+<th scope="col">#</th>
+<th scope="col">title</th>
+<th scope="col">content</th>
+<th scope="col">author_id</th>
+<th scope="col"><center>Action</center></th>
+</tr>
+</thead>
+<tbody>
+<?php
+include('connection.php');
+$sql = "SELECT * FROM blog_post";
+$result = mysqli_query($con, $sql);
+// $row = mysqli_fetch_array($result,
+MYSQLI_ASSOC);
+if ($result -> num_rows > 0) {
+// output data of each row
+$i = 1;
+while($row = $result->fetch_assoc())
+{
+$id = $row['id'];
+$title= $row['title'];
+$content=$row['content'];
+$author_id =$row['author_id'];
+$date =$row['date'];
+// $role =$row['role'];
+echo '<tr>
+<th scope="row">'.$i++.'</th>
+<td>'.$title.'</td>
+<td>'.$content.'</td>
+<td>'.$author_id.'</td>
+<td><center> <a href="delete.php?t=b&id='.$id.'"><i class="fa fatrash"></
+i></a></center></td>
+</tr>';
+}
+}
+?>
+</tbody>
+</table>
+</article>
+</div>
+</div>
+</main>
+</body>
+</html>
+
+
+====>Home.php:
+<html>
+<head>
+<title>home</title>
+<link rel="stylesheet"
+href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.mi n.
+integrity="sha384-
+Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/d
+AiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+integrity="sha384-
+KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93
+hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/poppe
+r.min.js"
+integrity="sha384-
+ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvf
+a0b4Q"
+crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.
+js"
+integrity="sha384-
+JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PV
+CmYl"
+crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fontawesome/
+4.7.0/css/font-awesome.min.css">
+<script src="static/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js
+"></script>
+<link rel="stylesheet" type="text/css" href="static/main.css">
+</head>
+<body>
+<?php include 'base.php';?>
+<main role="main" class="container">
+<div class="row" >
+<div class="col-md-10">
+<?php
+include('connection.php');
+$sql = "select * from blog_post";
+$result = mysqli_query($con, $sql);
+// $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+if ($result -> num_rows > 0) {
+// output data of each row while($row = $result->fetch_assoc())
+{
+$id = $row['id'];
+$title= $row['title'];
+$content=$row['content'];
+$date =$row['date'];
+$u_id=$row['author_id'];
+?>
+<article class="media content-section">
+<div class="media-body">
+<div class="article-metadata">
+<a class="mr-2" href="#"><?php echo $u_id?></a>
+<small class="text-muted"><?php echo $date?></small>
+</div>
+<h3><a class="article-title"href="post_detail.php?id=<?php echo $id
+?>"><?php echo $title
+?></a></h3>
+<p class="article-content"><?php echo $content?></p>
+<br>
+<hr>
+<div class="bg-light p-2">
+<form action="add_comment.php" method="POST"> center">
+<div class="d-flex flex-row align-items></div>
+<input type="hidden" name="id"value="<?php echo $id ?>"/>
+<textarea name="comment"class="form-control ml-1 mr-4 shadow-none
+textarea" rows='1' placeholder="comments..."></textarea>
+<input class="btn btn-primary btn-sm shadow-none" type="submit"
+value="Post comment"/>
+</div>
+</form>
+</div>
+<br>
+<div class="collapsable-comment">
+<h5>Comments<i class="fa fa-chevron-down servicedrop"></i></h5>
+<div class="commented-section mt-2">
+<?php
+where post_id = $id";
+include('connection.php');
+$sql = "select * from comment_table";
+$result1 = mysqli_query($con, $sql);
+if ($result -> num_rows > 0) {
+while($row = $result1->fetch_assoc())
+{
+$id = $row['comment_id'];
+$content=$row['comment_content
+$date =$row['date'];
+$u_id=$row['user_id'];
+?>
+<div class="d-flex flex-row align-items-center commented-user">
+<h5 class="mr-2"><?php
+echo $user_id ?></h5><span class="dot mb-1"></span>
+</div>
+<div class="comment-text- sm"><span></span><?php echo $content
+?></span></div>
+<?php
+}} else {
+echo "<h1>0 results</h1>";
+}
+?>
+</div>
+</div> <!--comment over -->
+</div>
+}} else {
+</article>
+<?php}
+?>
+</div>
+</div><br>
+</main>
+echo "<h1>0 results</h1>";
+</body>
+</html>
